@@ -6,10 +6,9 @@ app = Flask(__name__)
 
 # this is the list of carts
 carts = [
-    {"cart_id": 1, "products": [{"prod_name": "tomatoes", "quantity": 1, "ind. price": 2.36},
-                                {"prod_name": "dish soap", "quantity": 1, "ind. price": 4.68}], "total": 7.04},
-    {"cart_id": 2, "products": [{"prod_name": "detergent", "quantity": 1, "ind. price": 10.12}], "total": 10.12},
-    {"cart_id": 3, "products": [{"prod_name": "dish soap", "quantity": 1, "ind. price": 4.68}], "total": 4.68}
+    {"cart_id": 1, "products": [], "total": 0.00},
+    {"cart_id": 2, "products": [], "total": 0.00},
+    {"cart_id": 3, "products": [], "total": 0.00}
 ]
 
 
@@ -71,7 +70,6 @@ def add_products(user_id, product_id):
 
 # Endpoint 3: remove a specified quantity of a product from a cart
 @app.route('/cart/<int:user_id>/remove/<int:product_id>', methods=['POST'])
-# TODO: FOR SOME REASON THIS ISN'T TAKING. FIX IT
 def remove_products(user_id, product_id):
     # assume the specified quantity is 1
     cur = carts[user_id - 1]
