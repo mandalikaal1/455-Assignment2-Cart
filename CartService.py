@@ -4,11 +4,12 @@ import requests
 
 app = Flask(__name__)
 
+# this is the list of carts
 carts = [
-    {"cart_id": 1, "products": [{"prod_name": "tomatoes", "quantity": 1}, {"prod_name": "dish soap", "quantity": 1}],
-     "total": 7.04},
-    {"cart_id": 2, "products": [{"prod_name": "detergent", "quantity": 1}], "total": 10.12},
-    {"cart_id": 3, "products": [{"prod_name": "dish soap", "quantity": 1}], "total": 4.68}
+    {"cart_id": 1, "products": [{"prod_name": "tomatoes", "quantity": 1, "ind. price": 2.36},
+                                {"prod_name": "dish soap", "quantity": 1, "ind. price": 4.68}], "total": 7.04},
+    {"cart_id": 2, "products": [{"prod_name": "detergent", "quantity": 1, "ind. price": 10.12}], "total": 10.12},
+    {"cart_id": 3, "products": [{"prod_name": "dish soap", "quantity": 1, "ind. price": 4.68}], "total": 4.68}
 ]
 
 
@@ -51,10 +52,13 @@ def add_products(user_id, product_id):
     # and we need to add it
     # check = next((cart for cart in cur['products'] if carts[0]['products']['prod_name'] == "dish soap"), None)
     if index == -1:
-        cur['products'].append({"prod_name": prod_name, "quantity": 1})
+        cur['products'].append({"prod_name": prod_name, "quantity": 1, "ind. price": prod_price})
     # otherwise, we just increase the quantity
     else:
+        # this adds 1 to the existing quantity of that product and adds 1 to the total price of that
+        # product in that cart, taking into account the quantity of that product.
         cur['products'][index]['quantity'] += 1
+        cur['products'][index]['ind. price'] = round(cur['products'][index]['ind. price'] + prod_price, 2)
     # add the unit price to the total of the cart
     total_price = round(cur['total'] + prod_price, 2)
     cur['total'] = total_price
@@ -94,6 +98,9 @@ def remove_products(user_id, product_id):
     else:
         # remove a unit of the product
         cur['products'][index]['quantity'] -= 1
+        # subtract the individual price from the calculated price.
+        cur['products'][index]['ind. price'] = round(cur['products'][index]['ind. price'] - prod_price, 2)
+        # if the quantity of that product is now 0, remove it from the list of products in the cart.
         if cur['products'][index]['quantity'] == 0:
             cur['products'].remove(cur['products'][index])
         # subtract unit price from the total
@@ -109,4 +116,3 @@ def remove_products(user_id, product_id):
 if __name__ == '__main__':
     app.run(debug=False)
 
-# prod url: https://product-service-7sej.onrender.com
