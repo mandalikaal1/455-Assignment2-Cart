@@ -19,7 +19,7 @@ def get_cart(user_id):
     if cart:
         return jsonify({"cart": cart})
     else:
-        return jsonify({"error": "product not found"}), 404
+        return jsonify({"error": "cart not found"}), 404
 
 
 # Endpoint 2: add a specified quantity of a product
